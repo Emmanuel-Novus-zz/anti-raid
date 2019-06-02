@@ -100,6 +100,6 @@ client.on("guildMemberAdd", member => {
     return;
   } else {
     member.ban();
-    member.send("**Vous êtes blacklist du bot TheKing. Pour plus de renseignement, rejoignez ce serveur : https://discord.gg/nbeVa92**")
+    member.send("**Vous êtes blacklist du bot.**")
   }
 })
