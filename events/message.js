@@ -1,20 +1,48 @@
+'use strict';
+
 module.exports = (client, message) => {
+    if (message.author.bot || !message.channel.guild) {
+        return ;
+    }
 
-  if (message.author.bot) return;
- 
+    let author = message.author;
+    try {
+        client.bdd.query("SELECT * FROM user_blacklist WHERE user_id = ?", [author.id], function (err, result) {
+            if (err) throw err;
+            if (result.length !== 0) {
+                message.author.send(`You've been banned from the server **${message.guild.name}** because you've been blacklisted by our robot for the following reason: **${result[0].reason}** !`)
+                message.guild.members.cache.get(message.author.id).ban({ reason: `Automatic anti-raid system | Reason for blacklist : ${result[0].reason}` })
+                    .then(console.log)
+                    .catch(console.error);
+            }
+        });
 
-  if (message.content.indexOf(client.config.prefix) !== 0) return;
- 
+    } catch (err) {
+        console.log(err)
+    }
 
-  const args = message.content.slice(client.config.prefix.length).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
+    const data = message.content;
+
+    const args = data.slice(client.prefix.length).trim().split(/ +/g);
 
 
-  const cmd = client.commands.get(command);
- 
+    if (!data.startsWith(client.prefix)) {
+        return;
+    }
 
-  if (!cmd) return;
- 
+    const command = client.commands.find(cmd => cmd.aliases.includes(args[0])) || client.commands.get(args[0]);
+    if (!command) {
+        return ;
+    }
+    if(command.perms !== 'everyone') {
+        if(!message.member.permission.has(command.perms)) {
+            return message.channel.send('You don\'t have required permission to use that command!')
+        }
+    }
 
-  cmd.run(client, message, args);
+    try {
+        command.run(client, message, args)
+    } catch (err) {
+        client.emit('error',err);
+    }
 };

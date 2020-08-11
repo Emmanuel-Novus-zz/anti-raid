@@ -1,0 +1,17 @@
+{
+  "name": "anti-raid",
+  "version": "1.0.0",
+  "description": "Anti-Raid by Emmanuel#1943 and Matthieu#2050 | Command Handler by ArviX#8443",
+  "main": "main.js",
+  "scripts": {
+    "test": "node main"
+  }
+  "author": "Emmanuel-Novus",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "discord.js": "^12.2.0",
+    "moment": "^2.27.0",
+    "mysql2": "^2.1.0"
+  }
+}
