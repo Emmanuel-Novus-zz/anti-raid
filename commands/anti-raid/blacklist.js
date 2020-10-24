@@ -15,7 +15,7 @@ class Staff extends Command {
     }
 
     async run(client, message, args) {
-        let staff = client.bdd.query(`SELECT * FROM user_blacklist WHERE user_id = ?`, [message.author.id]);
+        let staff = client.bdd.query(`SELECT * FROM user_staff WHERE user_id = ?`, [message.author.id]);
         if (staff) {
             if (args[1] === "add") {
                 let member = message.mentions.members.first() || message.guild.members.cache.get(args[2]) || message.member;
